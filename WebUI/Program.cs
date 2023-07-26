@@ -1,4 +1,9 @@
+using Business.Abstract;
+using Business.Concrete;
+using DataAccess.Abstract;
 using DataAccess.Concrete.Context;
+using DataAccess.Concrete.EntityFramework;
+using DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -9,6 +14,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<Context>(opt =>
            opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ICustomerDal, EfCustomerDal>();
+builder.Services.AddScoped<ICustomerService,CustomerManager>();
+
+builder.Services.AddScoped<ICustomerProcessDal,EfCustomerProcessDal>();
+builder.Services.AddScoped<ICustomerProcessService,CustomerProcessManager>();
+builder.Services.AddScoped<IUowDal,UowDal>();
 
 var app = builder.Build();
 
